@@ -12,37 +12,25 @@ import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.PatchResult
 import app.revanced.patcher.patch.PatchResultSuccess
 import app.revanced.patcher.patch.annotations.Patch
-import app.revanced.patches.ecmwf.misc.subscription.fingerprints.SubscriptionUnlockFingerprint
+import app.revanced.patches.slack.intune.fingerprints.IntuneRemovalFingerprint
 
 @Patch
 @Name("slack-intune-removal")
 @Description("Removes Intune requirement.")
 @Compatibility([Package("com.Slack")]) //TODO: Slack does not use semantic versioning :(
-@Version("0.0.1")
+@Version("0.0.2")
 class IntuneRemovalPatch : BytecodePatch(
     listOf(
-        SubscriptionUnlockFingerprint
+        IntuneRemovalFingerprint
     )
 ) {
     override fun execute(context: BytecodeContext): PatchResult {
-        val result = SubscriptionUnlockFingerprint.result!!
-        val method = result.mutableMethod
-
-        val index = method.implementation!!.instructions.size
-
-        // remove R() at 10212
-        method.removeInstruction(index - 3)
-        // remove R() at 10206
-        method.removeInstruction(index - 5)
-
-        val insertIndex = index
-
-        method.addInstructions(
-            insertIndex - 1 - 2, 
-            """
-                const/4 p1, 0x1
-            """
+        IntuneRemovalFingerprint.result!!.mutableMethod.addInstructions(
+            0, """
+                return-void
+                """
         )
+
         return PatchResultSuccess()
     }
 }
