@@ -17,7 +17,7 @@ import app.revanced.patches.ecmwf.misc.subscription.fingerprints.SubscriptionUnl
 @Patch
 @Name("slack-intune-removal")
 @Description("Removes Intune requirement.")
-@Compatibility([Package("com.Slack", arrayOf("22.09.40.0"))])
+@Compatibility([Package("com.Slack")]) //TODO: Slack does not use semantic versioning :(
 @Version("0.0.1")
 class IntuneRemovalPatch : BytecodePatch(
     listOf(
